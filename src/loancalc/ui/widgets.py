@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from loancalc.core import theme
+from loancalc.ui import theme
 
 #: Columns shrink to this before the table gives up and scrolls.
 MIN_COLUMN_WIDTH = 46
@@ -53,6 +53,9 @@ class MetricCard(QFrame):
 
     def set_value(self, text: str) -> None:
         self._value.setText(text)
+
+    def set_caption(self, text: str) -> None:
+        self._caption.setText(text.upper())
 
     def set_note(self, text: str, tone: str = "") -> None:
         self._note.setText(text)

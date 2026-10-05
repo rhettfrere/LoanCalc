@@ -7,12 +7,12 @@ from types import TracebackType
 
 from PySide6.QtWidgets import QMessageBox
 
-from loancalc.core.logging_setup import get_logger
-from loancalc.core.qt_app import get_app
-from loancalc.paths import database_path
-from loancalc.state import AppState
-from loancalc.storage import Store
+from loancalc.data.paths import backup_dir, database_path
+from loancalc.data.storage import Store
+from loancalc.services.state import AppState
 from loancalc.ui.main_window import MainWindow
+from loancalc.ui.qt_app import get_app
+from loancalc.util.logging_setup import get_logger
 
 log = get_logger(__name__)
 
@@ -37,11 +37,14 @@ def run() -> int:
     app = get_app()
     _install_excepthook()
 
-    store = Store(database_path())
+    store = Store(database_path(), backup_dir=backup_dir())
     state = AppState(store)
     window = MainWindow(state)
     window.show()
-    log.info("LoanCalc started with %d loans", len(state.loans))
+    log.info(
+        "LoanCalc started with %d plans / %d loans (schema from v%d)",
+        len(state.plans), len(state.all_loans), store.migrated_from,
+    )
 
     code = app.exec()
     store.close()

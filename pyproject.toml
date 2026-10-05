@@ -1,7 +1,7 @@
 [project]
 name = "loancalc"
-version = "0.1.0"
-description = "Student loan tracking, avalanche payoff simulation, and repayment dashboard."
+version = "0.2.0"
+description = "Debt payoff planner for student loans, mortgages, auto loans and more — per plan or as a household."
 readme = "README.md"
 authors = [
     { name = "Rhett Frere", email = "FrereRhettB@JohnDeere.com" }
@@ -20,6 +20,15 @@ build = [
     "ordered-set>=4.1",
     "zstandard>=0.22",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
 
 [project.scripts]
 loancalc = "loancalc:main"

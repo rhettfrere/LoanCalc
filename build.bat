@@ -12,11 +12,14 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo [1/2] Syncing dependencies...
+echo [1/3] Syncing dependencies...
 uv sync --extra build || exit /b 1
 
-echo [2/2] Compiling with Nuitka...
-uv run python build.py %* || exit /b 1
+echo [2/3] Running tests...
+uv run --extra build pytest -q || exit /b 1
+
+echo [3/3] Compiling with Nuitka (icon: src\loancalc\resources\loancalc.ico)...
+uv run --extra build python build.py %* || exit /b 1
 
 echo.
 echo Done. See the build\ folder.

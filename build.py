@@ -1,26 +1,35 @@
 """Nuitka build script — produces a standalone Windows executable.
 
     uv sync --extra build
-    uv run python build.py            # standalone folder (fast start)
-    uv run python build.py --onefile  # single distributable .exe
-    uv run python build.py --console  # keep a console for debugging
+    uv run --extra build python build.py            # standalone folder (fast start)
+    uv run --extra build python build.py --onefile  # single distributable .exe
+    uv run --extra build python build.py --console  # keep a console for debugging
+
+The exe icon comes from src/loancalc/resources/loancalc.ico; the same file is
+bundled as data so the running window and taskbar use it too.
 """
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-ENTRY = ROOT / "src" / "loancalc" / "__main__.py"
+PACKAGE = ROOT / "src" / "loancalc"
+ENTRY = PACKAGE / "__main__.py"
+RESOURCES = PACKAGE / "resources"
+ICON = RESOURCES / "loancalc.ico"
 OUTPUT = ROOT / "build"
 DIST = ROOT / "dist"
 
 PRODUCT = "LoanCalc"
-VERSION = "0.1.0"
 COMPANY = "LoanCalc"
+VERSION = re.search(
+    r'__version__\s*=\s*"([^"]+)"', (PACKAGE / "__init__.py").read_text(encoding="utf-8")
+).group(1)
 
 
 def flags(onefile: bool, console: bool) -> list[str]:
@@ -37,9 +46,10 @@ def flags(onefile: bool, console: bool) -> list[str]:
         "--include-qt-plugins=platforms,styles,iconengines,imageformats",
         "--noinclude-qt-translations",
 
-        # --- our package, including the bundled starter CSV ---------------- #
+        # --- our package + resources (icon, starter dataset) --------------- #
         "--include-package=loancalc",
         "--include-package-data=loancalc",
+        f"--include-data-dir={RESOURCES}=loancalc/resources",
 
         # --- plotting / data ----------------------------------------------- #
         # pyqtgraph does a lot of lazy importing that Nuitka cannot see.
@@ -63,21 +73,22 @@ def flags(onefile: bool, console: bool) -> list[str]:
         "--nofollow-import-to=numpy.testing",
         "--nofollow-import-to=pyqtgraph.examples",
         "--nofollow-import-to=pyqtgraph.opengl",
+        "--nofollow-import-to=tests",
 
         # --- metadata ------------------------------------------------------ #
         f"--company-name={COMPANY}",
         f"--product-name={PRODUCT}",
         f"--file-version={VERSION}",
         f"--product-version={VERSION}",
-        "--file-description=Student loan tracking and repayment strategy",
+        "--file-description=Debt payoff planner — student loans, mortgages, auto loans and more",
         "--copyright=© 2026",
     ]
 
     args.append("--windows-console-mode=force" if console else "--windows-console-mode=disable")
 
-    icon = ROOT / "assets" / "loancalc.ico"
-    if icon.exists():
-        args.append(f"--windows-icon-from-ico={icon}")
+    if not ICON.exists():
+        raise SystemExit(f"Icon not found: {ICON}")
+    args.append(f"--windows-icon-from-ico={ICON}")
 
     if onefile:
         args += [

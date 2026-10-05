@@ -1,7 +1,7 @@
-"""LoanCalc — student loan tracking and repayment strategy."""
+"""LoanCalc — debt payoff planning for every loan type, per plan or as a household."""
 from __future__ import annotations
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = ["main", "__version__"]
 
 
