@@ -1,0 +1,36 @@
+[project]
+name = "loancalc"
+version = "0.1.0"
+description = "Student loan tracking, avalanche payoff simulation, and repayment dashboard."
+readme = "README.md"
+authors = [
+    { name = "Rhett Frere", email = "FrereRhettB@JohnDeere.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "PySide6>=6.7",
+    "pandas>=2.2",
+    "pyqtgraph>=0.13.7",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+build = [
+    "nuitka>=2.4",
+    "ordered-set>=4.1",
+    "zstandard>=0.22",
+]
+
+[project.scripts]
+loancalc = "loancalc:main"
+
+[project.gui-scripts]
+loancalc-gui = "loancalc:main"
+
+[build-system]
+requires = ["uv_build>=0.11.14,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "loancalc"
+module-root = "src"

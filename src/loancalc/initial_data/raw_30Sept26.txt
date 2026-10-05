@@ -1,0 +1,44 @@
+**Act as an Expert Python Developer and UI/UX Software Engineer.**
+
+I am building a comprehensive Student Loan Tracking and Repayment Strategy application. I have initialized an empty Python 3.12 project using `uv init --python 3.12 --package`. I have provided a raw `.txt` file in TSV format containing my current loan data (Loan Name, Current Loan Value, Interest Rate, Minimum Payment).
+
+Please generate the complete source code, project structure, and build scripts for this application based on the following strict requirements:
+
+**1. Architecture & Tech Stack**
+
+* **GUI Framework:** Use PySide6 (Qt) to create a sleek, professional, and modern desktop UI.
+* **Data Handling & Math:** Use `pandas` for data ingestion and manipulation.
+* **Visualization:** Use `matplotlib` or `pyqtgraph` embedded in the Qt UI for responsive, high-quality plots.
+* **Compilation:** The app must be compiled to a standalone `.exe` using `Nuitka`. Provide a `build.py` or `.bat` script with the exact Nuitka flags needed to bundle PySide6, pandas, and the plotting library.
+
+**2. Data Ingestion & Modularity**
+
+* Parse the provided `.txt` (TSV) file on the first run as the default state.
+* The application must be completely modular. Include a "File -> Import User Data" feature so I can share the `.exe` with others, allowing them to upload their own TSV/CSV of loans to populate the dashboard.
+* Implement a local SQLite database or JSON saving mechanism so user data, payment history, and settings persist between application launches.
+
+**3. Financial Engine & Strategy**
+
+* **Avalanche Method (Default):** The core logic must automatically calculate the most efficient payoff route. It should take a user-defined monthly allocation (defaulting to $5,000) and simulate applying all minimum payments first, then funneling 100% of the remaining allocation to the loan with the highest interest rate.
+* **Interest Accrual:** Calculate and track daily/monthly interest accrual against the principal balance for accurate forecasting.
+* **Dynamic Deviations:** Include a feature for "This Month's Payment." If the user enters a deviation (e.g., they can only pay $3,000 this month instead of $5,000, or they get a bonus and can pay $10,000), the app must update the current balances, log the payment, and dynamically recalculate the new overall payoff date and total interest saved/lost across the lifetime of the loans.
+
+**4. UI/UX Dashboard Requirements**
+
+* **Overview Panel:** Display Total Debt, Total Minimum Monthly Payment, Target Monthly Payment, Projected Payoff Date, and Total Interest to be Paid.
+* **Visualizations Tab:** Show interactive plots, specifically:
+* A stacked area chart or line graph showing the balance burn-down over time.
+* A bar chart comparing Total Principal vs. Total Interest paid by the end of the loan lifecycle.
+* use the theme and layout as seen in #core folder as an example. delete the #core folder when youre done.
+
+
+* **Monthly Action Center:** A dedicated module where the user logs their actual payment for the current month, allowing them to input their total capital allocated, showing exactly how the engine distributed it across the loans, and updating the database.
+
+**5. Deliverables**
+
+1. The folder structure and where to place the generated files within the `uv` package.
+2. The `pyproject.toml` dependencies.
+3. The complete Python code for the backend financial logic, the PySide6 UI, and the data persistence layer.
+4. The exact Nuitka compilation command/script.
+
+Please generate the project files step-by-step, starting with the core financial logic and data models.
