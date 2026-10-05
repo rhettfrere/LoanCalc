@@ -104,6 +104,13 @@ every File-menu item has a tooltip.
 .\build.bat --console    # keep a console window for debugging
 ```
 
+On macOS (requires Xcode Command Line Tools):
+
+```bash
+bash build_apple.sh           # sync, test, then build -> build/LoanCalc.app
+open build/LoanCalc.app
+```
+
 `build.py` embeds `src/loancalc/resources/loancalc.ico` as the executable icon. It also bundles
 the whole `resources/` folder, so the running window and taskbar use the same icon. The version
 is read from `loancalc.__version__`.
